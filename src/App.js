@@ -1,79 +1,308 @@
-import './App.css';
-import { Route, Routes } from 'react-router-dom';
-import Resume from './pages/Resume'
 
-function App() {
+import React, {useState} from 'react';
+import Resume from './pages/Resume';
 
-  const resumeData = {
-    name: 'Dinesh',
-    title: 'MERN Full Stack Developer',
+const App = () => {
+
+  const [isTrue, setIsTrue] = useState(false)
+  const [FormData, setFormData] = useState({
+    name: '',
+    title: '',
     contact: {
-      email: 'dineshgbharati@email.com',
-      phone: '(123) 456-7890',
-      location: 'San Jose, CA',
-      linkedin: '#',
-      github: '#',
+      email: '',
+      phone: '',
+      location: '',
+      linkedin: '',
+      github: '',
     },
     education: {
-      degree: 'Bachelor of Technology, Computer Engineering',
-      institution: 'R C Patel Institute of Technology',
-      year: '2006 - 2010',
-      location: 'Shirpur, India',
+      degree: '',
+      institution: '',
+      year: '',
+      location: '',
     },
-    skills: [
-      'JIRA',
-      'Amazon Web Services (AWS)',
-      'Jenkins',
-      'TensorFlow',
-      'Spring Boot',
-      'Apache Hadoop',
-      'IDPS',
-      'React Native',
-      'Oracle',
-    ],
-    workExperience: [
-      {
-        title: 'Director of Software Engineering',
-        company: 'Adobe',
-        dates: '2019 - current',
-        responsibilities: [
-          'Managed cross-functional team on Jira, increasing production velocity by 23%.',
-          'Integrated IDPS into systems, decreased successful attacks to less than 1%.',
-          'Boosted processes through Jenkins-based workflows, improving quality of software by 54%.',
-          'Achieved a 97% Net Promoter Score and a 4.7 out of 5 rating from end users for team’s projects.',
-        ],
-      },
-      {
-        title: 'Senior Engineering Manager',
-        company: 'PayPal',
-        dates: '2014 - 2019',
-        responsibilities: [
-          'Resolved app incompatibility issues, reducing incidents by 92%.',
-          'Automated 80% of repetitive processes, enhancing developer productivity.',
-          'Improved average app density defects by 31%.',
-          'Delivered a seamless user satisfaction rating of 94% through customer feedback surveys.',
-        ],
-      },
-      {
-        title: 'Principal Software Engineer',
-        company: 'Intel',
-        dates: '2010 - 2014',
-        responsibilities: [
-          'Optimized storage & data processing through Apache Hadoop, resulting in a 47% increase in current speed.',
-          'Delivered seamless app integrations for browsers with reduced page loads by 15%.',
-          'Designed redundancy systems, boosting reliability by 28%.',
-        ],
-      },
-    ],
+    skills: [],
+    workExperience: [{
+      title: '',
+      company: '',
+      dates: '',
+      responsibility: ''
+    }],
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    // For nested fields like contact and education
+    if (name.includes('.')) {
+      const [section, field] = name.split('.');
+      setFormData((prev) => ({
+        ...prev,
+        [section]: {
+          ...prev[section],
+          [field]: value,
+        },
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
+  const handleSkillChange = (index, value) => {
+    const updatedSkills = [...FormData.skills];
+    updatedSkills[index] = value;
+    setFormData({ ...FormData, skills: updatedSkills });
+  };
+
+  const handleAddSkill = () => {
+    setFormData({
+      ...FormData,
+      skills: [...FormData.skills, ''],
+    });
+  };
+
+    // Handle input change for work experience fields
+    const handleWorkExperienceChange = (index, field, value) => {
+      const updatedWorkExperience = [...FormData.workExperience];
+      updatedWorkExperience[index][field] = value;
+      setFormData({ ...FormData, workExperience: updatedWorkExperience });
+    };
+  
+    // Add a new work experience entry
+    const handleAddWorkExperience = () => {
+      setFormData({
+        ...FormData,
+        workExperience: [
+          ...FormData.workExperience,
+          { title: '', company: '', dates: '', responsibility: '' },
+        ],
+      });
+    };
+  
+    // Remove a specific work experience entry
+    const handleRemoveWorkExperience = (index) => {
+      const updatedWorkExperience = FormData.workExperience.filter(
+        (_, i) => i !== index
+      );
+      setFormData({ ...FormData, workExperience: updatedWorkExperience });
+    };
+
   return (
-    <div>
-      <Routes>
-        <Route path="/" element={<Resume {...resumeData}/>}/>
-      </Routes>
+  <div>
+    <div className='bg-gray-100 py-10'>
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6">Form</h1>
+
+    <form action="#" method="POST" class="space-y-6">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+        <input type="text" id="name" name="name" value={FormData.name} onChange={handleInputChange} placeholder="Enter your name" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+      </div>
+
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+        <input type="text" id="title" name="title" value={FormData.title} onChange={handleInputChange} placeholder="Enter your title" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+      </div>
+
+      <fieldset>
+        <legend class="text-lg font-medium text-gray-900">Contact</legend>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" id="contact.email" name="contact.email" value={FormData.contact.email} onChange={handleInputChange} placeholder="Enter your email" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+          </div>
+          <div>
+            <label for="phone" class="block text-sm font-medium text-gray-700">Phone</label>
+            <input type="text" id="contact.phone" name="contact.phone" value={FormData.contact.phone} onChange={handleInputChange} placeholder="Enter your phone number" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+          </div>
+          <div>
+            <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+            <input type="text" id="contact.location" value={FormData.contact.location} onChange={handleInputChange} name="contact.location" placeholder="Enter your location" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+          </div>
+          <div>
+            <label for="linkedin" class="block text-sm font-medium text-gray-700">LinkedIn</label>
+            <input type="text" id="contact.linkedin" name="contact.linkedin" value={FormData.contact.linkedin} onChange={handleInputChange} placeholder="Enter your LinkedIn URL" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+          </div>
+          <div>
+            <label for="github" class="block text-sm font-medium text-gray-700">GitHub</label>
+            <input type="text" id="contact.github" name="contact.github" value={FormData.contact.github} onChange={handleInputChange} placeholder="Enter your GitHub URL" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend class="text-lg font-medium text-gray-900">Education</legend>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+          <div>
+            <label for="degree" class="block text-sm font-medium text-gray-700">Degree</label>
+            <input type="text" id="education.degree" name="education.degree" value={FormData.education.degree} onChange={handleInputChange} placeholder="Enter your degree" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+          </div>
+          <div>
+            <label for="institution" class="block text-sm font-medium text-gray-700">Institution</label>
+            <input type="text" id="education.institution" name="education.institution" value={FormData.education.institution} onChange={handleInputChange} placeholder="Enter your institution name" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+          </div>
+          <div>
+            <label for="year" class="block text-sm font-medium text-gray-700">Year</label>
+            <input type="text" id="education.year" name="education.year" value={FormData.education.year} onChange={handleInputChange} placeholder="Enter year of graduation" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+          </div>
+          <div>
+            <label for="edu-location" classname="block text-sm font-medium text-gray-700">Location</label>
+            <input type="text" id="education.location" name="education.location" value={FormData.education.location} onChange={handleInputChange} placeholder="Enter location" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"/>
+          </div>
+        </div>
+      </fieldset>
+
+      
+      <div >
+        <label for="skills" class="block text-sm font-medium text-gray-700">Skills</label>
+        {
+          FormData.skills.map((skill, index) => (
+            <input key={index} id="skills" name="skills" value={skill} onChange={(e) => handleSkillChange(index, e.target.value)} rows="3" placeholder="Enter your skills" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></input>
+          ))
+        }
+        <button
+          type="button"
+          onClick={handleAddSkill}
+          className="mt-2 bg-indigo-500 text-white py-1 px-4 rounded-md shadow-sm hover:bg-indigo-600">Add Skill</button>
+      </div>
+        
+
+      
+
+      <fieldset>
+              <legend className="text-lg font-medium text-gray-900">
+                Work Experience
+              </legend>
+              {FormData.workExperience.map((work, index) => (
+                <div key={index}>
+                  <p className="w-full font-medium">
+                    Work Experience {index + 1}
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div>
+                      <label
+                        htmlFor={`work-title-${index}`}
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Title
+                      </label>
+                      <input
+                        type="text"
+                        id={`work-title-${index}`}
+                        name={`work-title-${index}`}
+                        value={work.title}
+                        onChange={(e) =>
+                          handleWorkExperienceChange(
+                            index,
+                            'title',
+                            e.target.value
+                          )
+                        }
+                        placeholder="Enter your work title"
+                        className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`company-${index}`}
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Company
+                      </label>
+                      <input
+                        type="text"
+                        id={`company-${index}`}
+                        name={`company-${index}`}
+                        value={work.company}
+                        onChange={(e) =>
+                          handleWorkExperienceChange(
+                            index,
+                            'company',
+                            e.target.value
+                          )
+                        }
+                        placeholder="Enter company name"
+                        className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`dates-${index}`}
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Dates
+                      </label>
+                      <input
+                        type="text"
+                        id={`dates-${index}`}
+                        name={`dates-${index}`}
+                        value={work.dates}
+                        onChange={(e) =>
+                          handleWorkExperienceChange(index, 'dates', e.target.value)
+                        }
+                        placeholder="Enter work dates"
+                        className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        htmlFor={`responsibility-${index}`}
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Responsibility
+                      </label>
+                      <textarea
+                        id={`responsibility-${index}`}
+                        name={`responsibility-${index}`}
+                        rows="3"
+                        value={work.responsibility}
+                        onChange={(e) =>
+                          handleWorkExperienceChange(
+                            index,
+                            'responsibility',
+                            e.target.value
+                          )
+                        }
+                        placeholder="Enter your responsibilities"
+                        className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveWorkExperience(index)}
+                    className="mt-2 bg-red-500 text-white py-1 px-4 rounded-md shadow-sm hover:bg-red-600"
+                  >
+                    Remove Work
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={handleAddWorkExperience}
+                className="mt-2 bg-indigo-500 text-white py-1 px-4 rounded-md shadow-sm hover:bg-indigo-600"
+              >
+                Add Work
+              </button>
+            </fieldset>
+
+      <div>
+        <button type="submit" className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-600 focus:ring-2 focus:ring-indigo-500" onClick={(e) => {
+          e.preventDefault();
+          setIsTrue(true);}}>Preview</button>
+      </div>
+    </form>
+  </div>
     </div>
+    
+    {isTrue ? <Resume {...FormData} /> : null}
+    
+  </div>
   );
-}
+   
+};
 
 export default App;

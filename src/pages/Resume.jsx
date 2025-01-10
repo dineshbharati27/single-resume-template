@@ -75,15 +75,15 @@ const Resume = ({
                 <h4 className="text-gray-800 font-semibold">{job.title}</h4>
                 <p className="text-gray-600">{`${job.company} / ${job.dates}`}</p>
                 <ul className="list-disc list-inside text-gray-700 mt-2">
-                  {job.responsibilities.map((responsibility, i) => (
-                    <li key={i}>{responsibility}</li>
-                  ))}
+                  {`${job.responsibility}`}
                 </ul>
               </div>
             ))}
           </div>
         </div>
+        <button className="w-full bg-indigo-500 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-600 focus:ring-2 focus:ring-indigo-500">download resume</button>
       </div>
+      
     </div>
   );
 };
