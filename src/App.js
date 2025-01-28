@@ -198,7 +198,7 @@ const App = () => {
         <label for="skills" class="block text-sm font-medium text-gray-700">Skills</label>
         {
           FormData.skills.map((skill, index) => (
-            <input key={index} id="skills" name="skills" value={skill} onChange={(e) => handleSkillChange(index, e.target.value)} rows="3" placeholder="Enter your skills" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></input>
+            <input key={index} id="skills" name="skills" value={skill} onChange={(e) => handleSkillChange(index, e.target.value)} rows="3" placeholder="Enter your skills" autoFocus class="w-full my-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></input>
           ))
         }
         <button
