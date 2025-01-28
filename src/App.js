@@ -22,6 +22,12 @@ const App = () => {
       location: '',
     },
     skills: [],
+    projects : [{
+      title: '',
+      github: '',
+      deployment: '',
+      description: [],
+    }],
     workExperience: [{
       title: '',
       company: '',
@@ -29,6 +35,38 @@ const App = () => {
       responsibility: ''
     }],
   });
+
+  const handleAddProject = () => {
+    const newProject = {
+      title: '',
+      github: '',
+      deployment: '',
+      description: [],
+    };
+    setFormData((prevState) => ({
+      ...prevState,
+      projects: [...prevState.projects, newProject],
+    }));
+  };
+  
+  const handleRemoveProject = (index) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      projects: prevState.projects.filter((_, i) => i !== index),
+    }));
+  };
+  
+  const handleProjectChange = (index, field, value) => {
+    setFormData((prevState) => {
+      const updatedProjects = [...prevState.projects];
+      updatedProjects[index] = {
+        ...updatedProjects[index],
+        [field]: value,
+      };
+      return { ...prevState, projects: updatedProjects };
+    });
+  };
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -168,10 +206,119 @@ const App = () => {
           onClick={handleAddSkill}
           className="mt-2 bg-indigo-500 text-white py-1 px-4 rounded-md shadow-sm hover:bg-indigo-600">Add Skill</button>
       </div>
-        
+
+        {/* projects section */}
+        <fieldset>
+          <legend className="text-lg font-medium text-gray-900">Projects</legend>
+          {FormData.projects.map((project, index) => (
+            <div key={index}>
+              <p className="w-full font-medium">Project {index + 1}</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                {/* Project Title */}
+                <div>
+                  <label
+                    htmlFor={`project-title-${index}`}
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    id={`project-title-${index}`}
+                    name={`project-title-${index}`}
+                    value={project.title}
+                    onChange={(e) =>
+                      handleProjectChange(index, 'title', e.target.value)
+                    }
+                    placeholder="Enter project title"
+                    className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                </div>
+
+                {/* GitHub Link */}
+                <div>
+                  <label
+                    htmlFor={`project-github-${index}`}
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    GitHub Link
+                  </label>
+                  <input
+                    type="url"
+                    id={`project-github-${index}`}
+                    name={`project-github-${index}`}
+                    value={project.github}
+                    onChange={(e) =>
+                      handleProjectChange(index, 'github', e.target.value)
+                    }
+                    placeholder="Enter GitHub URL"
+                    className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                </div>
+
+                {/* Deployment Link */}
+                <div>
+                  <label
+                    htmlFor={`project-deployment-${index}`}
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Deployment Link
+                  </label>
+                  <input
+                    type="url"
+                    id={`project-deployment-${index}`}
+                    name={`project-deployment-${index}`}
+                    value={project.deployment}
+                    onChange={(e) =>
+                      handleProjectChange(index, 'deployment', e.target.value)
+                    }
+                    placeholder="Enter Deployment URL"
+                    className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  />
+                </div>
+
+                {/* Description */}
+                <div className="col-span-2">
+                  <label
+                    htmlFor={`project-description-${index}`}
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    id={`project-description-${index}`}
+                    name={`project-description-${index}`}
+                    rows="3"
+                    value={project.description.join('\n')}
+                    onChange={(e) =>
+                      handleProjectChange(index, 'description', e.target.value.split('\n'))
+                    }
+                    placeholder="Enter description bullet points, one per line"
+                    className="w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                  ></textarea>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleRemoveProject(index)}
+                className="mt-2 bg-red-500 text-white py-1 px-4 rounded-md shadow-sm hover:bg-red-600"
+              >
+                Remove Project
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={handleAddProject}
+            className="mt-2 bg-indigo-500 text-white py-1 px-4 rounded-md shadow-sm hover:bg-indigo-600"
+          >
+            Add Project
+          </button>
+        </fieldset>
+
 
       
-
+        {/* work experience */}
       <fieldset>
               <legend className="text-lg font-medium text-gray-900">
                 Work Experience

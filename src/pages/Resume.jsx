@@ -7,7 +7,9 @@ const Resume = ({
   education,
   skills,
   workExperience,
+  projects
 }) => {
+
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center items-center p-5">
       <div className="bg-white max-w-4xl w-full shadow-lg rounded-lg p-8">
@@ -66,15 +68,43 @@ const Resume = ({
 
           {/* Right Column */}
           <div className="col-span-2">
+
+            {/* Project Section */}
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              PROJECTS
+            </h3>
+            {projects.map((project, index) => (
+              <div className="mb-4" key={index}>
+                <h4 className="text-gray-800 font-semibold">{project.title}</h4>
+                <div className="flex items-center space-x-4 mt-1">
+                  {project.github && (
+                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                      <i className="fab fa-github"></i> Github link
+                    </a>
+                  )}
+                  {project.deployment && (
+                    <a href={project.deployment} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                      <i className="fas fa-external-link-alt"></i> Deployment link
+                    </a>
+                  )}
+                </div>
+                <ul className="list-disc list-inside text-gray-700 mt-1">
+                  {project.description.map((point, i) => (
+                    <li key={i}>{point}</li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+
             {/* Work Experience */}
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
               WORK EXPERIENCE
             </h3>
             {workExperience.map((job, index) => (
-              <div className="mb-6" key={index}>
+              <div className="mb-4" key={index}>
                 <h4 className="text-gray-800 font-semibold">{job.title}</h4>
                 <p className="text-gray-600">{`${job.company} / ${job.dates}`}</p>
-                <ul className="list-disc list-inside text-gray-700 mt-2">
+                <ul className="list-disc list-inside text-gray-700 mt-1">
                   {`${job.responsibility}`}
                 </ul>
               </div>
